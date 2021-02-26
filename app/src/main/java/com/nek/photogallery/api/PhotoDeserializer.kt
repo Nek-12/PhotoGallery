@@ -31,7 +31,8 @@ class PhotoDeserializer : JsonDeserializer<PhotoResponse> {
             val item = GalleryItem(
                 jsonItem.get("title").asString,
                 jsonItem.get("id").asString,
-                url
+                url,
+                jsonItem.get("owner").asString
             )
             //Log.d(TAG, item.toString())
             item

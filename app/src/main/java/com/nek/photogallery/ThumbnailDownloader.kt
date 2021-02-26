@@ -49,15 +49,12 @@ class ThumbnailDownloader<in T>(
         ownerLifecycle.addObserver(fragmentLifecycleObserver)
     }
 
-
-
     fun clearQueue() {
         Log.i(TAG, "Clearing all requests from queue")
         requestHandler.removeMessages(MESSAGE_DOWNLOAD)
         requestMap.clear()
         cache.evictAll()
     }
-
 
     override fun quit(): Boolean {
         hasQuit = true

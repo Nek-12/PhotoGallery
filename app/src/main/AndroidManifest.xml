@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.nek.photogallery">
-    <permission android:name="com.bignerdranch.android.photogallery.PRIVATE"
-                android:protectionLevel="signature"/>
+
+    <permission
+            android:name="com.bignerdranch.android.photogallery.PRIVATE"
+            android:protectionLevel="signature"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.bignerdranch.android.photogallery.PRIVATE"/>
@@ -15,22 +17,24 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
-        <activity android:name="com.nek.photogallery.PhotoGalleryActivity">
+        <activity android:name=".PhotoPageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity android:name=".PhotoGalleryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="com.bignerdranch.android.photogallery.SHOW_NOTIFICATION"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter android:priority="-999">
+                <action android:name="com.bignerdranch.android.photogallery.SHOW_NOTIFICATION"/>
             </intent-filter>
         </activity>
 
         <receiver
                 android:name=".NotificationReceiver"
-                android:permission="com.example.PRIVATE"
-                android:exported="false">
+                android:exported="false"
+                android:permission="com.example.PRIVATE">
         </receiver>
-
     </application>
-
 
 </manifest>

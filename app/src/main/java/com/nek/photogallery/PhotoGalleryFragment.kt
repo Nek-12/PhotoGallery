@@ -1,5 +1,6 @@
 package com.nek.photogallery
 
+import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -10,6 +11,9 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
@@ -30,7 +34,7 @@ private const val COL_WIDTH = 400
 private const val PRELOAD_ITEMS = 10
 private const val POLL_WORK = "POLL_WORK"
 
-class PhotoGalleryFragment : Fragment() {
+class PhotoGalleryFragment : VisibleFragment() {
     private var _b: PhotoGalleryFragmentBinding? = null
     private val b get() = _b!!
 
@@ -49,6 +53,7 @@ class PhotoGalleryFragment : Fragment() {
         thumbnailDownloader =
             ThumbnailDownloader(lifecycle, responseHandler) { photoHolder, bitmap ->
                 val drawable = BitmapDrawable(resources, bitmap)
+                photoHolder.clickEnabled = true
                 photoHolder.bindDrawable(drawable)
             }
     }
@@ -162,8 +167,40 @@ class PhotoGalleryFragment : Fragment() {
     }
 
 
-    private class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
+    private inner class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView),
+        View.OnClickListener {
+        private var galleryItem: GalleryItem? = null
+        var clickEnabled = false
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
         val bindDrawable: (Drawable) -> Unit = itemImageView::setImageDrawable
+
+        fun bindGalleryItem(item: GalleryItem?) {
+            galleryItem = item
+        }
+
+        override fun onClick(view: View) {
+            if (!clickEnabled) return
+
+            galleryItem?.photoPageUri?.let {
+//                val intent = PhotoPageActivity.newIntent(requireContext(), it)
+//                startActivity(intent)
+                val color = ContextCompat.getColor(
+                    requireContext(), R.color.colorPrimary)
+                val params = CustomTabColorSchemeParams.Builder()
+                    .setNavigationBarColor(color)
+                    .setToolbarColor(color)
+                    .build()
+                CustomTabsIntent.Builder()
+                    .setDefaultColorSchemeParams( params )
+                    .setShowTitle(true)
+                    .build()
+                    .launchUrl(requireContext(), it)
+            }
+        }
     }
 
     private inner class PhotoAdapter :
@@ -180,8 +217,9 @@ class PhotoGalleryFragment : Fragment() {
 
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val placeholder: Drawable = ColorDrawable()
+            holder.clickEnabled = false //don't allow to click blank images
             holder.bindDrawable(placeholder)
-
+            holder.bindGalleryItem(getItem(position))
             //and preload some more
             for (i in position - PRELOAD_ITEMS..position + PRELOAD_ITEMS) {
                 if (i < 0)
