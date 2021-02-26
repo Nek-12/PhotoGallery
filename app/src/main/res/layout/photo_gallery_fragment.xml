@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ProgressBar android:layout_height="11dp"
+                 android:layout_width="match_parent"
+                 android:id="@+id/progress_horizontal"
+                 android:indeterminate="true"
+                 android:layout_gravity="top"
+                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photo_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"/>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/error"
+              android:layout_gravity="center"
+              android:gravity="center"
+              android:layout_marginBottom="16dp"
+              android:id="@+id/error_text">
+    </TextView>
+
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+    android:id="@+id/retry_btn">
+    </Button>
+
+</FrameLayout>
