@@ -6,7 +6,7 @@ Android sample app for showcasing networking, recyclerView &amp; other
 * Gson
 * RecyclerView
 * Paging, pagingadapter
-* ViewBinging
+* ViewBinding
 * Image downloading (w/o 3rd party libraries except retrofit)
 * Kotlin coroutines
 * Caching
